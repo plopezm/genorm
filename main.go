@@ -30,12 +30,16 @@ func main() {
 
 	flag.Parse()
 
-	pkgDir, err := packageDir(*packageName)
+	GenerateFiles(*typeName, *driver, *url, *tableName, *packageName)
+}
+
+func GenerateFiles(typeName string, driver string, url string, tableName string, packageName string) {
+	pkgDir, err := packageDir(packageName)
 	if err != nil {
 		panic(err)
 	}
 
-	outputFile := formatFileName(*typeName)
+	outputFile := formatFileName(typeName)
 	//fmt.Printf("Generating file: %s\n", outputFile)
 
 	writer, err := os.Create(filepath.Join(pkgDir, outputFile))
@@ -50,7 +54,7 @@ func main() {
 
 	generator := &Generator{}
 
-	m := metadata(*typeName, *driver, *url, *tableName, pkgDir)
+	m := metadata(typeName, driver, url, tableName, pkgDir)
 
 	//fmt.Printf("Metadata to apply %+v\n", m)
 
