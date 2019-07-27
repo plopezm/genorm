@@ -54,23 +54,23 @@ func (this *{{ .Type }}Repository) FindOneById(idField string, idValue interface
 	return
 }
 
-func (this *{{ .Type }}Repository) RawQuery(queryBuffer *godb.SQLBuffer) (result []{{ .Type }}, err error) {
+func (this *{{ .Type }}Repository) RawSQL(queryBuffer *godb.SQLBuffer) (result []{{ .Type }}, err error) {
 	result = make([]{{ .Type }}, 0, 0)
 	err = this.db.RawSQL(queryBuffer.SQL(), queryBuffer.Arguments()...).Do(&result)
 	return
 }
 
-func (this *{{ .Type }}Repository) StartTransaction() (err error) {
+func (this *{{ .Type }}Repository) BeginTx() (err error) {
 	err = this.db.Begin()
 	return
 }
 
-func (this *{{ .Type }}Repository) CommitTransaction() (err error) {
+func (this *{{ .Type }}Repository) CommitTx() (err error) {
 	err = this.db.Commit()
 	return
 }
 
-func (this *{{ .Type }}Repository) RollbackTransaction() (err error) {
+func (this *{{ .Type }}Repository) RollbackTx() (err error) {
 	err = this.db.Rollback()
 	return
 }
