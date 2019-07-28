@@ -10,7 +10,7 @@ To install genorm download it using golang tools:
 go get github.com/plopezm/genorm
 ```
 
-### Dabases supported
+### Supported databases
 
 This code generation tool uses godb to perform the queries. This means that every adapter used in godb is compatible with this library.
 
