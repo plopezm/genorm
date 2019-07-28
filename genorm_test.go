@@ -8,30 +8,33 @@ import (
 )
 
 const (
-	testFile            = "book-repository.go"
-	structName          = "Book"
-	driver              = "sqlite3"
-	path                = "local.db"
-	tableName           = "books"
-	expectedPackage     = "package genorm"
-	expectedFileContent = `
+	testFile        = "book-repository.go"
+	structName      = "Book"
+	driver          = "sqlite3"
+	path            = "local.db"
+	tableName       = "books"
+	expectedPackage = "package genorm"
+	expectedImports = `
 import (
 	"fmt"
 
 	"github.com/samonzeweb/godb"
-	"github.com/samonzeweb/godb/adapters/sqlite"
+	"github.com/samonzeweb/godb/adapters/sqlite3"
 )
-
+`
+	expectedStruct = `
 type BookRepository struct {
 	db *godb.DB
 }
-
+`
+	expectedTableName = `
 func (entity *Book) TableName() string {
 	return "books"
 }
-
+`
+	expectedConstructor = `
 func NewBookRepository() *BookRepository {
-	db, err := godb.Open(sqlite.Adapter, "local.db")
+	db, err := godb.Open(sqlite3.Adapter, "local.db")
 	if err != nil {
 		panic(err)
 	}
@@ -39,7 +42,8 @@ func NewBookRepository() *BookRepository {
 		db: db,
 	}
 }
-
+`
+	expectedFunctions = `
 func (this *BookRepository) FindAll() (result []Book, err error) {
 	result = make([]Book, 0, 0)
 	err = this.db.Select(&result).Do()
@@ -117,12 +121,19 @@ func TestAll(t *testing.T) {
 
 	dataStr := string(data)
 	if !strings.Contains(dataStr, expectedPackage) {
-		t.Errorf("wrong package")
-		return
+		t.Errorf("wrong package, package not contained in %s", dataStr)
 	}
-	if !strings.Contains(dataStr, expectedFileContent) {
-		t.Errorf("wrong package")
-		return
+	if !strings.Contains(dataStr, expectedImports) {
+		t.Errorf("wrong file content, EXPECTED %s  \n\n\n GENERATED: %s ", expectedImports, dataStr)
+	}
+	if !strings.Contains(dataStr, expectedTableName) {
+		t.Errorf("wrong file content, EXPECTED %s  \n\n\n GENERATED: %s ", expectedTableName, dataStr)
+	}
+	if !strings.Contains(dataStr, expectedConstructor) {
+		t.Errorf("wrong file content, EXPECTED %s  \n\n\n GENERATED: %s ", expectedConstructor, dataStr)
+	}
+	if !strings.Contains(dataStr, expectedFunctions) {
+		t.Errorf("wrong file content, EXPECTED %s  \n\n\n GENERATED: %s ", expectedFunctions, dataStr)
 	}
 	clean()
 }
