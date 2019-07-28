@@ -10,6 +10,18 @@ To install genorm download it using golang tools:
 go get github.com/plopezm/genorm
 ```
 
+### Dabases supported
+
+This code generation tool uses godb to perform the queries. This means that every adapter used in godb is compatible with this library.
+
+Available drivers:
+- sqlite
+- mssql
+- mysql
+- postgresql
+
+You can check the updated list [here](https://github.com/samonzeweb/godb/tree/master/adapters)
+
 ### How to use
 
 Using genorm is easy, just define your struct like golang db standard.
