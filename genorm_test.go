@@ -50,6 +50,16 @@ func (this *BookRepository) FindAll() (result []Book, err error) {
 	return
 }
 
+func (this *BookRepository) FindByFields(fields []string, values []interface{}) (result []Book, err error) {
+	result = make([]Book, 0, 0)
+	query := this.db.Select(&result)
+	for i, field := range fields {
+		query.Where(fmt.Sprintf("%s = ?", field), values[i])
+	}
+	err = query.Do()
+	return
+}
+
 func (this *BookRepository) FindAllWithIterator() (result godb.Iterator, err error) {
 	entity := &Book{}
 	result ,err = this.db.SelectFrom(entity.TableName()).DoWithIterator()

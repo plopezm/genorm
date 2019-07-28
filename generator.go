@@ -40,6 +40,16 @@ func (this *{{ .Type }}Repository) FindAll() (result []{{ .Type }}, err error) {
 	return
 }
 
+func (this *{{ .Type }}Repository) FindByFields(fields []string, values []interface{}) (result []{{ .Type }}, err error) {
+	result = make([]{{ .Type }}, 0, 0)
+	query := this.db.Select(&result)
+	for i, field := range fields {
+		query.Where(fmt.Sprintf("%s = ?", field), values[i])
+	}
+	err = query.Do()
+	return
+}
+
 func (this *{{ .Type }}Repository) FindAllWithIterator() (result godb.Iterator, err error) {
 	entity := &{{ .Type }}{}
 	result ,err = this.db.SelectFrom(entity.TableName()).DoWithIterator()
