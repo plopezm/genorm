@@ -42,6 +42,12 @@ func NewBookRepository() *BookRepository {
 		db: db,
 	}
 }
+
+func NewBookRepositoryFromConnection(db *godb.DB) *BookRepository {
+	return &BookRepository{
+		db: db,
+	}
+}
 `
 	expectedFunctions = `
 func (this *BookRepository) FindAll() (result []Book, err error) {

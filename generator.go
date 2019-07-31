@@ -34,6 +34,12 @@ func New{{ .Type }}Repository() *{{ .Type }}Repository {
 	}
 }
 
+func New{{ .Type }}RepositoryFromConnection(db *godb.DB) *{{ .Type }}Repository {
+	return &{{ .Type }}Repository{
+		db: db,
+	}
+}
+
 func (this *{{ .Type }}Repository) FindAll() (result []{{ .Type }}, err error) {
 	result = make([]{{ .Type }}, 0, 0)
 	err = this.db.Select(&result).Do()
